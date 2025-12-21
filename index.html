@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>365 Dias com a Palavra - PIB Penha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary-blue: #1e3a8a; /* Azul PIB Penha */
+            --secondary-blue: #3b82f6; 
+            --light-blue: #eff6ff;
+            --bg-color: #f1f5f9; 
+            --text-dark: #1e293b; 
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg-color); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container { 
+            background: white; 
+            width: 100%; 
+            max-width: 400px; 
+            padding: 30px 25px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px -10px rgba(30, 58, 138, 0.15); 
+            text-align: center; 
+            border-top: 8px solid var(--primary-blue);
+        }
+
+        /* --- LOGO PIB PENHA --- */
+        .church-logo {
+            width: 124px;
+            height: 62px;
+            margin: 0 auto 15px auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .header-church {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .project-title {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0 0 20px 0;
+            line-height: 1.2;
+        }
+
+        /* Barra de Progresso */
+        .progress-wrapper {
+            background: var(--light-blue);
+            height: 10px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            width: 100%;
+        }
+        .progress-fill {
+            background: var(--primary-blue);
+            height: 100%;
+            width: 0%;
+            transition: width 0.8s ease-out;
+        }
+
+        /* Exibição do Dia */
+        .day-label { font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        .day-number {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            line-height: 1;
+            margin: 5px 0 15px 0;
+        }
+
+        /* Caixa de Referência */
+        .ref-box {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            font-size: 18px;
+            font-weight: 700;
+            border: 1px solid #dbeafe;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* BOTÃO LER AGORA */
+        .btn-read { 
+            background: var(--primary-blue); 
+            color: white !important; 
+            text-decoration: none; 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            width: 100%; 
+            padding: 20px; 
+            border-radius: 16px; 
+            font-weight: 700; 
+            font-size: 17px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 10px 20px -5px rgba(30, 58, 138, 0.3);
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        .btn-read:active { transform: scale(0.97); }
+
+        /* Navegação */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            padding: 12px 0;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1; 
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .nav-btn.today { background: var(--light-blue); color: var(--primary-blue); border-color: var(--primary-blue); }
+
+        .footer-verse { margin-top: 25px; font-size: 11px; color: #94a3b8; font-style: italic; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="./logo-pib-penha.png" alt="PIB Penha" class="church-logo">
+
+    <div class="project-title">365 Dias com a Palavra</div>
+    
+    <div class="progress-wrapper">
+        <div id="progressBar" class="progress-fill"></div>
+    </div>
+
+    <div class="day-label">Dia da Jornada</div>
+    <div id="displayDay" class="day-number">1</div>
+    
+    <div id="displayRef" class="ref-box">Carregando...</div>
+    
+    <a href="#" id="linkBible" target="_blank" class="btn-read">
+        Ler na Bíblia Online
+    </a>
+
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="changeDay(-1)">← Anterior</button>
+        <button class="nav-btn today" onclick="goToToday()">Hoje</button>
+        <button class="nav-btn" onclick="changeDay(1)">Próximo →</button>
+    </div>
+
+    <div class="footer-verse">"Lâmpada para os meus pés é tua palavra e luz para o meu caminho."<br>(Salmos 119:105)</div>
+</div>
+
+<script>
+    const books = [
+        { n: "GEN", name: "Gênesis", c: 50 }, { n: "EXO", name: "Êxodo", c: 40 }, { n: "LEV", name: "Levítico", c: 27 }, 
+        { n: "NUM", name: "Números", c: 36 }, { n: "DEU", name: "Deuteronômio", c: 34 }, { n: "JOS", name: "Josué", c: 24 }, 
+        { n: "JDG", name: "Juízes", c: 21 }, { n: "RUT", name: "Rute", c: 4 }, { n: "1SA", name: "1 Samuel", c: 31 }, 
+        { n: "2SA", name: "2 Samuel", c: 24 }, { n: "1KI", name: "1 Reis", c: 22 }, { n: "2KI", name: "2 Reis", c: 25 }, 
+        { n: "1CH", name: "1 Crônicas", c: 29 }, { n: "2CH", name: "2 Crônicas", c: 36 }, { n: "EZR", name: "Esdras", c: 10 }, 
+        { n: "NEH", name: "Neemias", c: 13 }, { n: "EST", name: "Ester", c: 10 }, { n: "JOB", name: "Jó", c: 42 }, 
+        { n: "PSA", name: "Salmos", c: 150 }, { n: "PRO", name: "Provérbios", c: 31 }, { n: "ECC", name: "Eclesiastes", c: 12 }, 
+        { n: "SNG", name: "Cantares", c: 8 }, { n: "ISA", name: "Isaías", c: 66 }, { n: "JER", name: "Jeremias", c: 52 }, 
+        { n: "LAM", name: "Lamentações", c: 5 }, { n: "EZK", name: "Ezequiel", c: 48 }, { n: "DAN", name: "Daniel", c: 12 }, 
+        { n: "HOS", name: "Oseias", c: 14 }, { n: "JOL", name: "Joel", c: 3 }, { n: "AMO", name: "Amós", c: 9 }, 
+        { n: "OBA", name: "Obadias", c: 1 }, { n: "JON", name: "Jonas", c: 4 }, { n: "MIC", name: "Miqueias", c: 7 }, 
+        { n: "NAM", name: "Naum", c: 3 }, { n: "HAB", name: "Habacuque", c: 3 }, { n: "ZEP", name: "Sofonias", c: 3 }, 
+        { n: "HAG", name: "Ageu", c: 2 }, { n: "ZEC", name: "Zacarias", c: 14 }, { n: "MAL", name: "Malaquias", c: 4 }, 
+        { n: "MAT", name: "Mateus", c: 28 }, { n: "MRK", name: "Marcos", c: 16 }, { n: "LUK", name: "Lucas", c: 24 }, 
+        { n: "JHN", name: "João", c: 21 }, { n: "ACT", name: "Atos", c: 28 }, { n: "ROM", name: "Romanos", c: 16 }, 
+        { n: "1CO", name: "1 Coríntios", c: 16 }, { n: "2CO", name: "2 Coríntios", c: 13 }, { n: "GAL", name: "Gálatas", c: 6 }, 
+        { n: "EPH", name: "Efésios", c: 6 }, { n: "PHP", name: "Filipenses", c: 4 }, { n: "COL", name: "Colossenses", c: 4 }, 
+        { n: "1TH", name: "1 Tessalonicenses", c: 5 }, { n: "2TH", name: "2 Tessalonicenses", c: 3 }, 
+        { n: "1TI", name: "1 Timóteo", c: 6 }, { n: "2TI", name: "2 Timóteo", c: 4 }, { n: "TIT", name: "Tito", c: 3 }, 
+        { n: "PHM", name: "Filemom", c: 1 }, { n: "HEB", name: "Hebreus", c: 13 }, { n: "JAS", name: "Tiago", c: 5 }, 
+        { n: "1PE", name: "1 Pedro", c: 5 }, { n: "2PE", name: "2 Pedro", c: 3 }, { n: "1JO", name: "1 João", c: 5 }, 
+        { n: "2JO", name: "2 João", c: 1 }, { n: "3JO", name: "3 João", c: 1 }, { n: "JUD", name: "Judas", c: 1 }, 
+        { n: "REV", name: "Apocalipse", c: 22 }
+    ];
+
+    let currentDay = getDayOfYear();
+
+    function getDayOfYear() {
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        return Math.floor((now - start) / 86400000);
+    }
+
+    function calculateReading(day) {
+        const totalChapters = 1189;
+        const chaptersPerDay = totalChapters / 365;
+        const startTotal = Math.floor((day - 1) * chaptersPerDay);
+        const endTotal = Math.floor(day * chaptersPerDay);
+        const targetEnd = (day === 365) ? totalChapters : endTotal;
+
+        let accum = 0;
+        let startBook = null, endBook = null;
+        let startCh = 0, endCh = 0;
+
+        for (let book of books) {
+            if (!startBook && (accum + book.c) > startTotal) {
+                startBook = book;
+                startCh = startTotal - accum + 1;
+            }
+            if (accum + book.c >= targetEnd) {
+                endBook = book;
+                endCh = targetEnd - accum;
+                break;
+            }
+            accum += book.c;
+        }
+
+        let refText = (startBook === endBook) ? 
+            `${startBook.name} ${startCh}${startCh !== endCh ? '-' + endCh : ''}` :
+            `${startBook.name} ${startCh} - ${endBook.name} ${endCh}`;
+
+        const url = `https://www.bible.com/pt/bible/129/${startBook.n}.${startCh}`;
+        return { refText, url };
+    }
+
+    function updateUI() {
+        if (currentDay < 1) currentDay = 1;
+        if (currentDay > 365) currentDay = 365;
+        const data = calculateReading(currentDay);
+        document.getElementById('displayDay').innerText = currentDay;
+        document.getElementById('displayRef').innerText = data.refText;
+        document.getElementById('linkBible').href = data.url;
+        document.getElementById('progressBar').style.width = (currentDay / 365 * 100) + "%";
+    }
+
+    function changeDay(n) { currentDay += n; updateUI(); }
+    function goToToday() { currentDay = getDayOfYear(); updateUI(); }
+    updateUI();
+</script>
+</body>
+</html>
