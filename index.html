@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>365 Dias com a Palavra - PIB Penha</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -22,224 +22,132 @@
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
         }
 
         .container { 
             background: white; 
             width: 100%; 
-            max-width: 400px; 
-            padding: 30px 25px; 
+            max-width: 380px; 
+            padding: 25px 20px; 
             border-radius: 24px; 
             box-shadow: 0 20px 40px -10px rgba(30, 58, 138, 0.15); 
             text-align: center; 
             border-top: 8px solid var(--primary-blue);
+            box-sizing: border-box;
         }
 
-        .church-logo {
-            width: 124px;
-            height: 62px;
-            margin: 0 auto 15px auto;
-            display: block;
-            object-fit: contain;
-        }
+        .church-logo { width: 110px; height: auto; margin-bottom: 15px; }
+        .header-church { font-size: 11px; font-weight: 700; color: var(--primary-blue); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+        .project-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
 
-        .header-church {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--primary-blue);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            opacity: 0.8;
-        }
+        .progress-wrapper { background: var(--light-blue); height: 8px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { background: var(--primary-blue); height: 100%; width: 0%; transition: width 0.8s; }
 
-        .project-title {
-            font-size: 19px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 0 0 20px 0;
-            line-height: 1.2;
-        }
-
-        .progress-wrapper {
-            background: var(--light-blue);
-            height: 10px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            overflow: hidden;
-            width: 100%;
-        }
-        .progress-fill {
-            background: var(--primary-blue);
-            height: 100%;
-            width: 0%;
-            transition: width 0.8s ease-out;
-        }
-
-        .day-label { font-size: 13px; color: #64748b; font-weight: 600; text-transform: uppercase; }
-        .day-number {
-            font-size: 60px;
-            font-weight: 800;
-            color: var(--primary-blue);
-            line-height: 1;
-            margin: 5px 0 15px 0;
-        }
+        .day-label { font-size: 12px; color: #64748b; font-weight: 600; }
+        .day-number { font-size: 55px; font-weight: 800; color: var(--primary-blue); margin: 5px 0; }
 
         .ref-box {
             background: var(--light-blue);
             color: var(--primary-blue);
-            padding: 20px;
+            padding: 15px;
             border-radius: 16px;
-            margin-bottom: 25px;
-            font-size: 18px;
+            margin-bottom: 20px;
+            font-size: 17px;
             font-weight: 700;
             border: 1px solid #dbeafe;
-            min-height: 50px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .btn-read { 
-            background: var(--primary-blue); 
-            color: white !important; 
-            text-decoration: none; 
-            display: flex; 
-            justify-content: center;
-            align-items: center;
-            width: 100%; 
-            padding: 20px; 
-            border-radius: 16px; 
-            font-weight: 700; 
-            font-size: 17px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 10px 20px -5px rgba(30, 58, 138, 0.3);
-            transition: all 0.2s;
-            box-sizing: border-box;
-            cursor: pointer;
-        }
-        .btn-read:active { transform: scale(0.97); }
-
-        .nav-controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 25px;
+            background: var(--primary-blue); color: white !important; text-decoration: none; 
+            display: block; width: 100%; padding: 18px; border-radius: 14px; 
+            font-weight: 700; font-size: 16px; text-transform: uppercase;
+            box-shadow: 0 8px 15px rgba(30, 58, 138, 0.2); box-sizing: border-box;
         }
 
+        .nav-controls { display: flex; gap: 8px; margin-top: 20px; }
         .nav-btn {
-            background: white;
-            border: 1px solid #e2e8f0;
-            color: #64748b;
-            padding: 12px 0;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            flex: 1; 
-            transition: all 0.2s;
-            font-family: inherit;
+            background: white; border: 1px solid #e2e8f0; color: #64748b;
+            padding: 12px 5px; border-radius: 10px; font-weight: 600; font-size: 13px;
+            flex: 1; cursor: pointer; font-family: inherit;
         }
         .nav-btn.today { background: var(--light-blue); color: var(--primary-blue); border-color: var(--primary-blue); }
 
-        /* --- FERRAMENTAS DE NAVEGAÇÃO SIMPLIFICADAS --- */
+        /* --- SEÇÃO DE FERRAMENTAS CORRIGIDA --- */
         .tools-section {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
+            margin-top: 25px; padding-top: 15px; border-top: 1px solid #f1f5f9;
         }
+        .tools-title { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase; }
         
-        .tools-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: #94a3b8;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
         .tools-grid {
-            display: flex; /* Mudado para Flex para alinhar melhor */
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .tool-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 13px;
-            box-sizing: border-box;
-            color: var(--text-dark);
-            text-align: center;
-            flex: 2; /* Calendário ocupa mais espaço */
+            display: flex; gap: 8px; align-items: center; width: 100%;
         }
 
         .btn-small {
-            background: #f1f5f9;
-            border: none;
-            color: #475569;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            flex: 1; /* Botão ocupa menos espaço */
-            white-space: nowrap;
+            background: #f1f5f9; border: none; color: #475569;
+            height: 45px; padding: 0 15px; border-radius: 10px;
+            font-size: 13px; font-weight: 700; cursor: pointer;
+            white-space: nowrap; flex-shrink: 0;
         }
-        .btn-small:hover { background: #e2e8f0; }
 
-        .footer-verse { margin-top: 25px; font-size: 11px; color: #94a3b8; font-style: italic; line-height: 1.4; }
+        .date-input-wrapper {
+            position: relative; flex-grow: 1; min-width: 0; /* Impede o estouro no flex */
+        }
+
+        .tool-input {
+            width: 100%; height: 45px; padding: 0 10px 0 35px;
+            border: 1px solid #cbd5e1; border-radius: 10px;
+            font-family: inherit; font-size: 13px; color: var(--text-dark);
+            box-sizing: border-box; background: white;
+            appearance: none; -webkit-appearance: none; /* Remove estilos nativos que estouram */
+        }
+
+        .calendar-icon {
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            pointer-events: none; font-size: 16px;
+        }
+
+        .footer-verse { margin-top: 20px; font-size: 10px; color: #94a3b8; font-style: italic; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="./logo-pib-penha.png" alt="PIB Penha" class="church-logo">
-
+    <img src="./assets/pibpenha/images/logo.webp" alt="PIB Penha" class="church-logo">
     <div class="header-church">PIB Penha</div>
     <div class="project-title">365 Dias com a Palavra</div>
     
-    <div class="progress-wrapper">
-        <div id="progressBar" class="progress-fill"></div>
-    </div>
+    <div class="progress-wrapper"><div id="progressBar" class="progress-fill"></div></div>
 
     <div class="day-label">Dia da Jornada</div>
     <div id="displayDay" class="day-number">1</div>
-    
     <div id="displayRef" class="ref-box">Carregando...</div>
     
-    <a href="#" id="linkBible" target="_blank" class="btn-read">
-        Ler na Bíblia Online
-    </a>
+    <a href="#" id="linkBible" target="_blank" class="btn-read">Ler na Bíblia Online</a>
 
     <div class="nav-controls">
-        <button class="nav-btn" onclick="changeDay(-1)">← Anterior</button>
+        <button class="nav-btn" onclick="changeDay(-1)">← Ant.</button>
         <button class="nav-btn today" onclick="goToToday()">Hoje</button>
-        <button class="nav-btn" onclick="changeDay(1)">Próximo →</button>
+        <button class="nav-btn" onclick="changeDay(1)">Próx. →</button>
     </div>
 
     <div class="tools-section">
-        <div class="tools-title">Buscar data específica</div>
+        <div class="tools-title">Ir para uma data</div>
         <div class="tools-grid">
-            <button class="btn-small" onclick="goToDay1()">↺ Dia 01</button>
-            
-            <div style="position: relative; flex: 2;">
-                <input type="date" id="datePicker" class="tool-input" onchange="handleDatePick(this.value)" style="padding-left: 35px;">
-                <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 16px;">
-                    📅
-                </span>
+            <button class="btn-small" onclick="goToDay1()">↺ Início</button>
+            <div class="date-input-wrapper">
+                <span class="calendar-icon">📅</span>
+                <input type="date" id="datePicker" class="tool-input" onchange="handleDatePick(this.value)">
             </div>
         </div>
-        <div style="font-size: 10px; color: #94a3b8; margin-top: 8px;">Toque no ícone de calendário para escolher uma data.</div>
     </div>
 
-    <div class="footer-verse">"Lâmpada para os meus pés é tua palavra e luz para o meu caminho."<br>(Salmos 119:105)</div>
+    <div class="footer-verse">"Lâmpada para os meus pés é tua palavra..."<br>(Salmos 119:105)</div>
 </div>
 
 <script>
@@ -305,8 +213,7 @@
             `${startBook.name} ${startCh}${startCh !== endCh ? '-' + endCh : ''}` :
             `${startBook.name} ${startCh} - ${endBook.name} ${endCh}`;
 
-        const url = `https://www.bible.com/pt/bible/129/${startBook.n}.${startCh}`;
-        return { refText, url };
+        return { refText, url: `https://www.bible.com/pt/bible/129/${startBook.n}.${startCh}` };
     }
 
     function updateUI() {
@@ -324,44 +231,17 @@
         updateUI(); 
     }
 
-    function goToToday() { 
-        currentDay = getDayOfYear(); 
-        updateUI(); 
-    }
+    function goToToday() { currentDay = getDayOfYear(); updateUI(); }
+    function goToDay1() { currentDay = 1; updateUI(); }
 
-    function goToDay1() {
-        currentDay = 1;
-        updateUI();
-    }
-
-    // --- CORREÇÃO DO CÁLCULO DE DATA ---
     function handleDatePick(dateStr) {
         if (!dateStr) return;
-
-        // Divide a string "YYYY-MM-DD" em partes numéricas
         const parts = dateStr.split('-');
-        const year = parseInt(parts[0]);
-        const month = parseInt(parts[1]) - 1; // Meses em JS são 0-11
-        const day = parseInt(parts[2]);
-
-        // Cria a data definida para MEIO-DIA para evitar problemas de fuso horário
-        // Ex: Se fosse 00:00, o fuso -3h transformaria em dia anterior às 21h
-        const targetDate = new Date(year, month, day, 12, 0, 0);
-        
-        // Cria a data de início do ano (também meio-dia)
-        // dia 0 de janeiro na verdade é 31 de dezembro do ano anterior, então usamos dia 1 e subtraímos no cálculo ou usamos dia 0.
-        // Método mais seguro: Dia 0 de Jan = 31 Dez Anterior.
-        // Diff entre 1 Jan e 31 Dez Anterior = 1 dia.
-        const startOfYear = new Date(year, 0, 0, 12, 0, 0);
-
-        const diff = targetDate - startOfYear;
-        const oneDay = 1000 * 60 * 60 * 24;
-        let dayOfYear = Math.floor(diff / oneDay);
-
-        // Segurança para anos bissextos ou erros de arredondamento
-        if (dayOfYear > 365) dayOfYear = 365; // Ajuste simples para plano fixo de 365
+        const targetDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 12, 0, 0);
+        const startOfYear = new Date(targetDate.getFullYear(), 0, 0, 12, 0, 0);
+        let dayOfYear = Math.floor((targetDate - startOfYear) / (1000 * 60 * 60 * 24));
+        if (dayOfYear > 365) dayOfYear = 365;
         if (dayOfYear < 1) dayOfYear = 1;
-
         currentDay = dayOfYear;
         updateUI();
     }
