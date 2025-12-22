@@ -225,11 +225,18 @@
     </div>
 
     <div class="tools-section">
-        <div class="tools-title">Encontrar Leitura por Data</div>
+        <div class="tools-title">Buscar data específica</div>
         <div class="tools-grid">
             <button class="btn-small" onclick="goToDay1()">↺ Dia 01</button>
-            <input type="date" id="datePicker" class="tool-input" onchange="handleDatePick(this.value)">
+            
+            <div style="position: relative; flex: 2;">
+                <input type="date" id="datePicker" class="tool-input" onchange="handleDatePick(this.value)" style="padding-left: 35px;">
+                <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 16px;">
+                    📅
+                </span>
+            </div>
         </div>
+        <div style="font-size: 10px; color: #94a3b8; margin-top: 8px;">Toque no ícone de calendário para escolher uma data.</div>
     </div>
 
     <div class="footer-verse">"Lâmpada para os meus pés é tua palavra e luz para o meu caminho."<br>(Salmos 119:105)</div>
