@@ -38,8 +38,6 @@
             box-sizing: border-box;
         }
 
-        .church-logo { width: 110px; height: auto; margin-bottom: 15px; }
-        .header-church { font-size: 11px; font-weight: 700; color: var(--primary-blue); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
         .project-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; }
 
         .progress-wrapper { background: var(--light-blue); height: 8px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
@@ -78,38 +76,41 @@
         }
         .nav-btn.today { background: var(--light-blue); color: var(--primary-blue); border-color: var(--primary-blue); }
 
-        /* --- SEÇÃO DE FERRAMENTAS CORRIGIDA --- */
         .tools-section {
             margin-top: 25px; padding-top: 15px; border-top: 1px solid #f1f5f9;
         }
         .tools-title { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase; }
         
         .tools-grid {
-            display: flex; gap: 8px; align-items: center; width: 100%;
+            display: flex; gap: 6px; align-items: center; width: 100%;
         }
 
+        /* Estilo do botão pequeno de Início */
         .btn-small {
             background: #f1f5f9; border: none; color: #475569;
-            height: 45px; padding: 0 15px; border-radius: 10px;
-            font-size: 13px; font-weight: 700; cursor: pointer;
+            height: 45px; padding: 0 10px; border-radius: 10px;
+            font-size: 18px; font-weight: 700; cursor: pointer;
             white-space: nowrap; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .date-input-wrapper {
-            position: relative; flex-grow: 1; min-width: 0; /* Impede o estouro no flex */
+        .input-wrapper {
+            position: relative; flex: 1; min-width: 0;
         }
 
         .tool-input {
-            width: 100%; height: 45px; padding: 0 10px 0 35px;
+            width: 100%; height: 45px; padding: 0 5px 0 28px;
             border: 1px solid #cbd5e1; border-radius: 10px;
-            font-family: inherit; font-size: 13px; color: var(--text-dark);
+            font-family: inherit; font-size: 12px; color: var(--text-dark);
             box-sizing: border-box; background: white;
-            appearance: none; -webkit-appearance: none; /* Remove estilos nativos que estouram */
+            appearance: none; -webkit-appearance: none;
+            cursor: pointer;
+            text-overflow: ellipsis; /* Evita quebra de texto em telas pequenas */
         }
 
-        .calendar-icon {
-            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-            pointer-events: none; font-size: 16px;
+        .input-icon {
+            position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+            pointer-events: none; font-size: 14px; z-index: 10;
         }
 
         .footer-verse { margin-top: 20px; font-size: 10px; color: #94a3b8; font-style: italic; }
@@ -135,13 +136,22 @@
     </div>
 
     <div class="tools-section">
-        <div class="tools-title">Ir para uma data</div>
+        <div class="tools-title">Navegação Rápida</div>
         <div class="tools-grid">
-            <button class="btn-small" onclick="goToDay1()">↺ Início</button>
-            <div class="date-input-wrapper">
-                <span class="calendar-icon">📅</span>
+            
+            <button class="btn-small" onclick="goToDay1()" title="Voltar ao Início">↺</button>
+
+            <div class="input-wrapper">
+                <span class="input-icon">#️⃣</span>
+                <select id="daySelect" class="tool-input" onchange="goToSpecificDay(this.value)">
+                    </select>
+            </div>
+
+            <div class="input-wrapper">
+                <span class="input-icon">📅</span>
                 <input type="date" id="datePicker" class="tool-input" onchange="handleDatePick(this.value)">
             </div>
+
         </div>
     </div>
 
@@ -149,69 +159,163 @@
 </div>
 
 <script>
-    const books = [
-        { n: "GEN", name: "Gênesis", c: 50 }, { n: "EXO", name: "Êxodo", c: 40 }, { n: "LEV", name: "Levítico", c: 27 }, 
-        { n: "NUM", name: "Números", c: 36 }, { n: "DEU", name: "Deuteronômio", c: 34 }, { n: "JOS", name: "Josué", c: 24 }, 
-        { n: "JDG", name: "Juízes", c: 21 }, { n: "RUT", name: "Rute", c: 4 }, { n: "1SA", name: "1 Samuel", c: 31 }, 
-        { n: "2SA", name: "2 Samuel", c: 24 }, { n: "1KI", name: "1 Reis", c: 22 }, { n: "2KI", name: "2 Reis", c: 25 }, 
-        { n: "1CH", name: "1 Crônicas", c: 29 }, { n: "2CH", name: "2 Crônicas", c: 36 }, { n: "EZR", name: "Esdras", c: 10 }, 
-        { n: "NEH", name: "Neemias", c: 13 }, { n: "EST", name: "Ester", c: 10 }, { n: "JOB", name: "Jó", c: 42 }, 
-        { n: "PSA", name: "Salmos", c: 150 }, { n: "PRO", name: "Provérbios", c: 31 }, { n: "ECC", name: "Eclesiastes", c: 12 }, 
-        { n: "SNG", name: "Cantares", c: 8 }, { n: "ISA", name: "Isaías", c: 66 }, { n: "JER", name: "Jeremias", c: 52 }, 
-        { n: "LAM", name: "Lamentações", c: 5 }, { n: "EZK", name: "Ezequiel", c: 48 }, { n: "DAN", name: "Daniel", c: 12 }, 
-        { n: "HOS", name: "Oseias", c: 14 }, { n: "JOL", name: "Joel", c: 3 }, { n: "AMO", name: "Amós", c: 9 }, 
-        { n: "OBA", name: "Obadias", c: 1 }, { n: "JON", name: "Jonas", c: 4 }, { n: "MIC", name: "Miqueias", c: 7 }, 
-        { n: "NAM", name: "Naum", c: 3 }, { n: "HAB", name: "Habacuque", c: 3 }, { n: "ZEP", name: "Sofonias", c: 3 }, 
-        { n: "HAG", name: "Ageu", c: 2 }, { n: "ZEC", name: "Zacarias", c: 14 }, { n: "MAL", name: "Malaquias", c: 4 }, 
-        { n: "MAT", name: "Mateus", c: 28 }, { n: "MRK", name: "Marcos", c: 16 }, { n: "LUK", name: "Lucas", c: 24 }, 
-        { n: "JHN", name: "João", c: 21 }, { n: "ACT", name: "Atos", c: 28 }, { n: "ROM", name: "Romanos", c: 16 }, 
-        { n: "1CO", name: "1 Coríntios", c: 16 }, { n: "2CO", name: "2 Coríntios", c: 13 }, { n: "GAL", name: "Gálatas", c: 6 }, 
-        { n: "EPH", name: "Efésios", c: 6 }, { n: "PHP", name: "Filipenses", c: 4 }, { n: "COL", name: "Colossenses", c: 4 }, 
-        { n: "1TH", name: "1 Tessalonicenses", c: 5 }, { n: "2TH", name: "2 Tessalonicenses", c: 3 }, 
-        { n: "1TI", name: "1 Timóteo", c: 6 }, { n: "2TI", name: "2 Timóteo", c: 4 }, { n: "TIT", name: "Tito", c: 3 }, 
-        { n: "PHM", name: "Filemom", c: 1 }, { n: "HEB", name: "Hebreus", c: 13 }, { n: "JAS", name: "Tiago", c: 5 }, 
-        { n: "1PE", name: "1 Pedro", c: 5 }, { n: "2PE", name: "2 Pedro", c: 3 }, { n: "1JO", name: "1 João", c: 5 }, 
-        { n: "2JO", name: "2 João", c: 1 }, { n: "3JO", name: "3 João", c: 1 }, { n: "JUD", name: "Judas", c: 1 }, 
-        { n: "REV", name: "Apocalipse", c: 22 }
+    // Plano de Leitura Cronológico
+    const readingPlan = [
+        "Gênesis 1,2", "Gênesis 3-5", "Gênesis 6-9", "Gênesis 10,11", "Gênesis 12-15",
+        "Gênesis 16-19", "Gênesis 20-22", "Gênesis 23-26", "Gênesis 27-29", "Gênesis 30-32",
+        "Gênesis 33-36", "Gênesis 37-39", "Gênesis 40-42", "Gênesis 43-46", "Gênesis 47-50",
+        "Jó 1-4", "Jó 5-7", "Jó 8-10", "Jó 11-13", "Jó 14-17",
+        "Jó 18-20", "Jó 21-24", "Jó 25-27", "Jó 28-31", "Jó 32-34",
+        "Jó 35-37", "Jó 38-42", "Êxodo 1-4", "Êxodo 5-7", "Êxodo 8-10",
+        "Êxodo 11-13", "Êxodo 14-17", "Êxodo 18-20", "Êxodo 21-24", "Êxodo 25-27",
+        "Êxodo 28-31", "Êxodo 32-34", "Êxodo 35-37", "Êxodo 38-40", "Levítico 1-4",
+        "Levítico 5-7", "Levítico 8-10", "Levítico 11-13", "Levítico 14-16", "Levítico 17-19",
+        "Levítico 20-22, Salmo 95", "Levítico 23-27", "Números 1-3", "Números 4-6", "Números 7-10",
+        "Números 11-12:16, Salmo 90", "Salmo 91; Números 12-14", "Números 15-17", "Números 18-20", "Números 21-24",
+        "Números 25-27", "Números 28-30", "Números 31-33", "Números 34-36", "Deuteronômio 1-3",
+        "Deuteronômio 4-6", "Deuteronômio 7-9", "Deuteronômio 10-12", "Deuteronômio 13-16", "Deuteronômio 17-19",
+        "Deuteronômio 20-22", "Deuteronômio 23-25", "Deuteronômio 26-28", "Deuteronômio 29-31", "Deuteronômio 32-34",
+        "Josué 1-3", "Josué 4-6", "Josué 7-9", "Josué 10-12", "Josué 13-15",
+        "Josué 16-18", "Josué 19-21", "Josué 22-24", "Juízes 1-4", "Juízes 5-8",
+        "Juízes 9-12", "Juízes 13-15", "Juízes 16-18", "Juízes 19-21", "Rute 1-4",
+        "1Samuel 1-4", "1Samuel 5-8", "1Samuel 9-12", "1Samuel 13-16", "1Samuel 17, 18; Salmo 23",
+        "1Samuel 19:1-18; Salmo 11, 59", "1Samuel 19:19-24; 20,21; Salmo 56, 142", "1Samuel 22; Salmos 17, 34, 35", "Salmos 52, 109, 140", "Salmo 31, 64; 1Samuel 23:1-29",
+        "Salmo 54,22; 1Samuel 24", "Salmos 63,12,57", "Salmos 58, 120; 1Samuel 25", "Salmo 141; 1Samuel 26,27", "1Samuel 28,29,30",
+        "1Samuel 31; 2Samuel 1,2", "Salmo 101; 2Samuel 3,4", "2Samuel 5; Salmo 139; 2Samuel 6", "Salmos 78,96", "Salmos 15,24,68",
+        "Salmos 132,133", "Salmos 106, 105", "2Samuel 7; Salmos 16,2", "Salmo 110; 2Samuel 8; Salmos 97,98", "Salmos 108,117,118",
+        "Salmos 60,9,20", "2Samuel 9,10,11", "2Samuel 12; Salmos 6,32", "Salmos 33,38,39,21", "Salmos 40,41,51",
+        "Salmos 103,104; 2Samuel 13", "Salmo 55; 2Samuel 14,15", "2Samuel 16; Salmo 7; 2Samuel 17", "Salmos 3,4,42", "Salmo 43,5,8",
+        "Salmo 28,61,62", "Salmo 69,70,71,86", "Salmo 143, 2Samuel 18,19", "Salmos 122, 26, 27", "Salmos 141, 65; 2Samuel 20",
+        "2Samuel 21; Salmos 29,30", "Salmos 131, 18; 2Samuel 22-24; 1Reis 1", "Salmos 72, 145; 1Reis 2", "1Reis 3,4,5", "Salmos 99,100, 127, 128",
+        "Provérbios 1-4", "Provérbios 5-7", "Provérbios 8-11", "Provérbios 12-15", "Provérbios 16-19",
+        "Provérbios 20-23", "Provérbios 24-27", "Provérbios 28-30", "Provérbios 31; Eclesiastes 1,2", "Eclesiastes 3-5",
+        "Eclesiastes 6-8", "Eclesiastes 9-11", "Eclesiastes 12; Cantares 1,2", "Cantares 3-5", "Cantares 6-8",
+        "1Reis 6-8", "1Reis 9-11", "1Reis 12-14", "1Reis 15-17", "1Reis 18-20",
+        "1Reis 21,22; 2Reis 1", "2Reis 2-4", "2Reis 5-7", "2Reis 8-10", "2Reis 11-14:20",
+        "Joel 1-3", "2Reis 14:21-25; Jonas 1-4", "2Reis 14:26-29; Amós 1-3", "Amós 4-6", "Amós 7-9",
+        "2Reis 15-17", "Oséias 1-4", "Oséias 5-7", "Oséias 8-10", "Oséias 11-14",
+        "2Reis 18; Salmo 44", "2Reis 19:1-34; Salmo 73", "2Reis 19:35-37; Salmos 92, 93", "Salmos 46, 75, 76", "Isaías 1-3",
+        "Isaías 4-6", "Isaías 7-9", "Isaías 10-13", "Isaías 14-17", "Isaías 18-21",
+        "Isaías 22-25", "Isaías 26-28", "Isaías 29-30", "Isaías 31-33", "Isaías 34-36",
+        "Isaías 37-39", "Isaías 40-42", "Isaías 43-45", "Isaías 46-48", "Isaías 49-51",
+        "Isaías 52-54", "Isaías 55-57", "Isaías 58-60", "Isaías 61-63", "Isaías 64-66",
+        "Miquéias 1-4", "Miquéias 5-7", "Naum 1-3", "2Reis 20,21", "Sofonias 1-3",
+        "Habacuque 1-3", "2Reis 22-23; Salmo 74", "Salmos 79, 94; 2Reis 24:1-16", "Salmo 88; 2Reis 24:17-20, 25", "Obadias; Jeremias 1,2",
+        "Jeremias 3-5", "Jeremias 6-8", "Jeremias 9-12", "Jeremias 13; Salmos 13,14", "Salmos 36, 37, 49",
+        "Salmos 53, 77, 89", "Salmo 123", "Salmos 25, 50, 67", "Salmos 102, 130", "Jeremias 14-16",
+        "Jeremias 17-20", "Jeremias 21-23", "Jeremias 24-26", "Jeremias 27-29", "Jeremias 30-32",
+        "Jeremias 33-36", "Jeremias 37-39", "Jeremias 40-42", "Jeremias 43-46", "Jeremias 47-49",
+        "Jeremias 50-52", "Lamentações 1-5", "1Crônicas 1-3", "1Crônicas 4-6", "1Crônicas 7-9",
+        "1Crônicas 10-13", "1Crônicas 14-16", "1Crônicas 17-19", "1Crônicas 20-23", "1Crônicas 24-26",
+        "1Crônicas 27-29", "2Crônicas 1-3", "2Crônicas 4-6", "2Crônicas 7-9", "2Crônicas 10-13",
+        "2Crônicas 14-16", "2Crônicas 17-19", "Salmo 82; 2Crônicas 20; Salmo 83", "Salmos 47, 48, 115", "2Crônicas 21-24",
+        "2Crônicas 25-27", "2Crônicas 28, 29; Salmo 80", "2Crônicas 30-32", "2Crônicas 33-36", "Ezequiel 1-3",
+        "Ezequiel 4-7", "Ezequiel 8-11", "Ezequiel 12-14", "Ezequiel 15-18", "Ezequiel 19-21",
+        "Ezequiel 22-24", "Ezequiel 25-27", "Ezequiel 28-30", "Ezequiel 31-33", "Ezequiel 34-36",
+        "Ezequiel 37-39", "Ezequiel 40-42", "Ezequiel 43-45", "Ezequiel 46-48", "Daniel 1-3",
+        "Daniel 4-6", "Daniel 7-9", "Daniel 10-12", "Esdras 1; Salmos 85,126, 137", "Esdras 2; Salmos 1, 121",
+        "Salmo 119", "Esdras 3:1-7; Salmos 107, 111", "Salmos 112, 113, 114", "Esdras 3:8-13; Salmos 66, 84,116", "Salmos 125, 129; Esdras 4; Ageu 1,2",
+        "Zacarias 1-3", "Zacarias 4-6", "Zacarias 7-10", "Zacarias 11-14", "Esdras 5, 6:1-15; Salmo 138",
+        "Esdras 6:16-22; Salmos 81, 134", "Salmos 135, 136, 146", "Salmo 87; Esdras 7-8", "Esdras 9,10; Ester 1,2", "Salmo 10, 45; Ester 3, 4:1-9",
+        "Ester 4:10-17; 5-7", "Ester 8-10; Salmo 124", "Neemias 1-3", "Salmos 147-149", "Neemias 4-6",
+        "Salmos 150, 19; Neemias 7", "Neemias 8-10", "Neemias 11-13", "Malaquias 1-4", "Mateus 1-4",
+        "Mateus 5-7", "Mateus 8-11", "Mateus 12-15", "Mateus 16-19", "Mateus 20-22",
+        "Mateus 23-25", "Mateus 26-28", "Marcos 1-3", "Marcos 4-6", "Marcos 7-10",
+        "Marcos 11-13", "Marcos 14-16", "Lucas 1-4", "Lucas 5-8", "Lucas 9-12",
+        "Lucas 13-16", "Lucas 17-20", "Lucas 21-24", "João 1-4", "João 5-8",
+        "João 9-12", "João 13-16", "João 17-21", "Atos 1-3", "Atos 4-6",
+        "Atos 7-9", "Atos 10-14", "Tiago 1,2", "Tiago 3-5", "Gálatas 1-3",
+        "Gálatas 4-6", "Atos 15 a 18:11", "1Tessalonicenses 1-5", "2Tessalonicenses 1-3; Atos 18:12 19:10", "1Coríntios 1-4",
+        "1Coríntios 5-8", "1Coríntios 9-12", "1Coríntios 13-16", "Atos 19:11-20:1; 2Coríntios 1-3", "2Coríntios 4-6",
+        "2Coríntios 7-9", "2Coríntios 10-13; Atos 20:2", "Romanos 1-4", "Romanos 5-6", "Romanos 7-9",
+        "Romanos 10-12", "Romanos 13-16", "Atos 20-22", "Atos 23-25", "Atos 26-28",
+        "Efésios 1-3", "Efésios 4-6", "Filipenses 1-4", "Colossenses 1-4", "Filemon; 1Pedro 1,2",
+        "Hebreus 1-4", "Hebreus 5-7", "Hebreus 8-10", "Hebreus 11-13", "1Timóteo 1-3",
+        "1Timóteo 4-6", "Tito 1-3", "2Timóteo 1-4", "1Pedro 3-5", "2Pedro 1-3",
+        "1 João 1,2", "1 João 3-5", "2 João; 3 João; Judas", "Apocalipse 1-3", "Apocalipse 4-6",
+        "Apocalipse 7-9", "Apocalipse 10-12", "Apocalipse 13-15", "Apocalipse 16-18", "Apocalipse 19-22"
     ];
+
+    const bibleMap = {
+        "Gênesis": "GEN", "Êxodo": "EXO", "Exodo": "EXO", "Levítico": "LEV", "Números": "NUM", "Deuteronômio": "DEU",
+        "Josué": "JOS", "Juízes": "JDG", "Rute": "RUT", "1Samuel": "1SA", "2Samuel": "2SA",
+        "1Reis": "1KI", "2Reis": "2KI", "1Crônicas": "1CH", "2Crônicas": "2CH",
+        "Esdras": "EZR", "Neemias": "NEH", "Ester": "EST", "Jó": "JOB",
+        "Salmos": "PSA", "Salmo": "PSA", "Provérbios": "PRO", "Eclesiastes": "ECC", "Cantares": "SNG",
+        "Isaías": "ISA", "Jeremias": "JER", "Lamentações": "LAM", "Ezequiel": "EZK", "Daniel": "DAN",
+        "Oséias": "HOS", "Joel": "JOL", "Amós": "AMO", "Obadias": "OBA", "Jonas": "JON", "Miquéias": "MIC",
+        "Naum": "NAM", "Habacuque": "HAB", "Sofonias": "ZEP", "Ageu": "HAG", "Zacarias": "ZEC", "Malaquias": "MAL",
+        "Mateus": "MAT", "Marcos": "MRK", "Lucas": "LUK", "João": "JHN", "Atos": "ACT",
+        "Romanos": "ROM", "1Coríntios": "1CO", "2Coríntios": "2CO", "Gálatas": "GAL", "Efésios": "EPH",
+        "Filipenses": "PHP", "Colossenses": "COL", "1Tessalonicenses": "1TH", "2Tessalonicenses": "2TH",
+        "1Timóteo": "1TI", "2Timóteo": "2TI", "Tito": "TIT", "Filemom": "PHM", "Filemon": "PHM",
+        "Hebreus": "HEB", "Tiago": "JAS", "1Pedro": "1PE", "2Pedro": "2PE",
+        "1João": "1JO", "1 João": "1JO", "2João": "2JO", "2 João": "2JO", "3João": "3JO", "3 João": "3JO",
+        "Judas": "JUD", "Apocalipse": "REV"
+    };
 
     let currentDay = getDayOfYear();
 
     function getDayOfYear() {
         const now = new Date();
         const start = new Date(now.getFullYear(), 0, 0);
-        return Math.floor((now - start) / 86400000);
+        let day = Math.floor((now - start) / 86400000);
+        if(day < 1) day = 1;
+        if(day > 365) day = 365;
+        return day;
     }
 
     function calculateReading(day) {
-        const totalChapters = 1189;
-        const chaptersPerDay = totalChapters / 365;
-        const startTotal = Math.floor((day - 1) * chaptersPerDay);
-        const endTotal = Math.floor(day * chaptersPerDay);
-        const targetEnd = (day === 365) ? totalChapters : endTotal;
+        let refText = readingPlan[day - 1];
+        if (!refText) refText = "Fim da Leitura";
+        
+        let url = "https://www.bible.com/pt/bible/129/GEN.1"; 
+        
+        try {
+            const parts = refText.split(/[\s,;]+/); 
+            let bookCode = "GEN";
+            let chapter = "1";
+            let found = false;
 
-        let accum = 0;
-        let startBook = null, endBook = null;
-        let startCh = 0, endCh = 0;
+            for (let i = 0; i < parts.length; i++) {
+                let word = parts[i].replace(/[^a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ0-9]/g, "");
+                let possibleBook = bibleMap[word];
 
-        for (let book of books) {
-            if (!startBook && (accum + book.c) > startTotal) {
-                startBook = book;
-                startCh = startTotal - accum + 1;
+                if (!possibleBook && i < parts.length - 1) {
+                     let doubleWord = word + " " + parts[i+1];
+                     if (bibleMap[doubleWord]) {
+                         possibleBook = bibleMap[doubleWord];
+                         i++; 
+                     }
+                }
+
+                if (possibleBook) {
+                    bookCode = possibleBook;
+                    for(let j=i+1; j < parts.length; j++) {
+                        let potentialChap = parts[j].match(/\d+/);
+                        if (potentialChap) {
+                            chapter = potentialChap[0];
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(found) break;
+                }
             }
-            if (accum + book.c >= targetEnd) {
-                endBook = book;
-                endCh = targetEnd - accum;
-                break;
-            }
-            accum += book.c;
+            url = `https://www.bible.com/pt/bible/129/${bookCode}.${chapter}`;
+        } catch (e) { console.error(e); }
+
+        return { refText, url };
+    }
+
+    function initDaySelector() {
+        const select = document.getElementById('daySelect');
+        for (let i = 1; i <= 365; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = `Dia ${i}`;
+            select.appendChild(option);
         }
-
-        let refText = (startBook === endBook) ? 
-            `${startBook.name} ${startCh}${startCh !== endCh ? '-' + endCh : ''}` :
-            `${startBook.name} ${startCh} - ${endBook.name} ${endCh}`;
-
-        return { refText, url: `https://www.bible.com/pt/bible/129/${startBook.n}.${startCh}` };
     }
 
     function updateUI() {
@@ -220,6 +324,9 @@
         document.getElementById('displayRef').innerText = data.refText;
         document.getElementById('linkBible').href = data.url;
         document.getElementById('progressBar').style.width = (currentDay / 365 * 100) + "%";
+        
+        // Sincroniza o Select
+        document.getElementById('daySelect').value = currentDay;
     }
 
     function changeDay(n) { 
@@ -230,7 +337,16 @@
     }
 
     function goToToday() { currentDay = getDayOfYear(); updateUI(); }
-    function goToDay1() { currentDay = 1; updateUI(); }
+    
+    function goToSpecificDay(val) {
+        currentDay = parseInt(val);
+        updateUI();
+    }
+    
+    function goToDay1() {
+        currentDay = 1;
+        updateUI();
+    }
 
     function handleDatePick(dateStr) {
         if (!dateStr) return;
@@ -244,6 +360,8 @@
         updateUI();
     }
 
+    // Inicialização
+    initDaySelector();
     updateUI();
 </script>
 </body>
